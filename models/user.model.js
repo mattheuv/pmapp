@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import bcrypt from 'bcrypt'
 
+//email, password, name, address, telephone
 const User = new mongoose.Schema({
     creation_date: {
         type: Date,

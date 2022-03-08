@@ -1,14 +1,9 @@
 import express from "express"
 import passport from "passport";
-import User from '../models/user.model.js'
-import { msgs } from "../config/constants.js";
 import { transporter, mailOptions, mailOptionsLogOut } from "../config/nodemailer.js";
 
 
-
 const router = express.Router()
-
-
 
 
 class UserRouter {
@@ -22,6 +17,7 @@ router.get('/signup', (req, res, next) => {
   })
 })
 
+
 router.post('/signup', passport.authenticate('local-signup', {
   successRedirect: '/',
   failureRedirect: '/signup',
@@ -33,18 +29,23 @@ router.get('/login', (req, res, next) => {
   res.render('signin', {
       title: 'Sign In',
   })
+})
 
-  transporter.sendMail(mailOptions, (err, info) => {
+router.post('/login', 
+  passport.authenticate('local-signin', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/usertest');
+  });
+
+  router.get('/usertest', isAuthenticated, (req, res) => {
+    res.send("is active")
+    transporter.sendMail(mailOptions, (err, info) => {
       if (err) {
           console.log(err)
           return err
       }
       console.log(info)
   })
-})
-
-  router.get('/usertest', isAuthenticated, (req, res) => {
-    res.send("is active")
   })
 
   router.get('/logout', isAuthenticated, (req, res, next) => {
@@ -68,7 +69,7 @@ function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
       return next()
   }
-  res.redirect('/signin')
+  res.redirect('/login')
 }
 
 
