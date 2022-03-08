@@ -87,7 +87,6 @@ const io = new Server(httpServer, {
 //     });
 //   });
 
-
 httpServer.listen(process.env.SERVER_PORT, function(){
     console.log(`You're running socket server on http://localhost:${process.env.SERVER_PORT}`)
 })
